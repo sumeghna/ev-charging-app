@@ -2,7 +2,6 @@
 
 A modern, full-stack web application that helps electric vehicle owners find nearby charging stations, check real-time availability, and book charging slots across India.
 
-![EV India App](https://img.shields.io/badge/Status-Live-brightgreen)
 ![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=flat&logo=mongodb&logoColor=white)
 ![Express](https://img.shields.io/badge/Express.js-404D59?style=flat)
 ![React](https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB)
@@ -11,7 +10,7 @@ A modern, full-stack web application that helps electric vehicle owners find nea
 
 ---
 
-## 📱 Live Demo
+## 📱 Features
 
 | Feature | Description |
 |---------|-------------|
@@ -24,7 +23,7 @@ A modern, full-stack web application that helps electric vehicle owners find nea
 
 ---
 
-## ✨ Features
+## ✨ Features Breakdown
 
 ### For Users (Drivers)
 - 🔍 **Find Charging Stations** - Search by city or use GPS location
@@ -59,7 +58,6 @@ A modern, full-stack web application that helps electric vehicle owners find nea
 | **Mongoose** | ODM for MongoDB |
 | **JWT** | Authentication |
 | **bcryptjs** | Password hashing |
-| **CORS** | Cross-origin resource sharing |
 
 ### Frontend
 | Technology | Purpose |
@@ -70,8 +68,6 @@ A modern, full-stack web application that helps electric vehicle owners find nea
 | **React Router** | Navigation |
 | **React Leaflet** | Interactive maps |
 | **Axios** | HTTP client |
-| **React Hot Toast** | Notifications |
-| **date-fns** | Date manipulation |
 
 ### Database
 | Collection | Purpose |
@@ -89,7 +85,7 @@ ev-charging-app/
 │ │ └── db.js # MongoDB connection
 │ ├── models/
 │ │ ├── User.js # User schema
-│ │ ├── Station.js # Station schema with 2dsphere index
+│ │ ├── Station.js # Station schema
 │ │ └── Booking.js # Booking schema
 │ ├── controllers/
 │ │ ├── authController.js # Auth handlers
@@ -140,9 +136,6 @@ ev-charging-app/
 ├── tailwind.config.js
 └── postcss.config.js
 
-
-## 🚀 Getting Started
-
 ### Prerequisites
 
 - **Node.js** (v16 or higher)
@@ -155,15 +148,96 @@ ev-charging-app/
 git clone https://github.com/sumeghna/ev-charging-app.git
 cd ev-charging-app
 
-Backend Setup
+2. Backend Setup
 bash
 cd backend
 npm install
 cp .env.example .env
+Update backend/.env with your MongoDB URI:
 
-Frontend Setup
+env
+PORT=5000
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/evcharging
+JWT_SECRET=your_super_secret_jwt_key_here
+NODE_ENV=development
+
+3. Initialize & Seed Database
 bash
-cd ../frontend/frontend
+npm run init          # Create indexes and admin user
+npm run seed:india    # Seed Indian charging stations
+4. Start Backend Server
+bash
+npm run dev
+Backend runs on http://localhost:5000
+
+5. Frontend Setup
+bash
+cd ../frontend
 npm install
 cp .env.example .env
+Update frontend/.env:
 
+env
+VITE_API_URL=http://localhost:5000
+6. Start Frontend Server
+bash
+npm run dev
+Frontend runs on http://localhost:5173
+
+7. Open the Application
+Visit http://localhost:5173 in your browser
+
+🔑 Default Credentials
+Role	Email	Password
+Admin	admin@evcharge.com	Admin@123
+Test User	test@example.com	password123
+Station Owner	owner@india.com	Owner@123
+📡 API Endpoints
+Authentication
+Method	Endpoint	Description	Auth
+POST	/api/auth/register	Register a new user	Public
+POST	/api/auth/login	Login user	Public
+GET	/api/auth/me	Get current user	Private
+Stations
+Method	Endpoint	Description	Auth
+GET	/api/stations	Get all stations	Public
+GET	/api/stations/city/:city	Get stations by city	Public
+GET	/api/stations/:id	Get station details	Public
+POST	/api/stations	Create station	Owner/Admin
+PUT	/api/stations/:id	Update station	Owner/Admin
+DELETE	/api/stations/:id	Delete station	Owner/Admin
+Bookings
+Method	Endpoint	Description	Auth
+GET	/api/bookings/availability	Check slot availability	Private
+POST	/api/bookings	Create booking	Private
+GET	/api/bookings/me	Get user bookings	Private
+PATCH	/api/bookings/:id/cancel	Cancel booking	Private
+Admin
+Method	Endpoint	Description	Auth
+GET	/api/admin/users	Get all users	Admin
+GET	/api/admin/stats	Get dashboard stats	Admin
+🗺️ Supported Cities
+City	State	Stations
+Mumbai	Maharashtra	3
+Delhi	Delhi	2
+Bangalore	Karnataka	2
+Chennai	Tamil Nadu	1
+Hyderabad	Telangana	1
+Pune	Maharashtra	1
+Kolkata	West Bengal	1
+Ahmedabad	Gujarat	1
+Jaipur	Rajasthan	1
+Lucknow	Uttar Pradesh	1
+📦 Available Scripts
+Backend
+bash
+npm run dev          # Start development server with nodemon
+npm start            # Start production server
+npm run seed:india   # Seed Indian charging stations
+npm run init         # Initialize database indexes
+npm run reset        # Reset database (init + seed)
+Frontend
+bash
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run preview      # Preview production build
