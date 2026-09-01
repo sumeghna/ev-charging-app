@@ -24,7 +24,6 @@ const Navbar = () => {
     <nav className={`${bgColor} border-b ${borderColor} sticky top-0 z-40 transition-colors duration-300`}>
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 group">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 flex items-center justify-center text-white text-lg font-bold shadow-lg group-hover:shadow-xl transition-all duration-300">
               ⚡
@@ -35,7 +34,6 @@ const Navbar = () => {
             </div>
           </Link>
 
-          {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-6">
             <Link to="/stations" className={`${textColor} ${hoverColor} transition-colors duration-200 text-sm font-medium`}>
               Find Stations
@@ -61,6 +59,9 @@ const Navbar = () => {
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-900/20">
                   <span className="text-sm">👤</span>
                   <span className={`text-sm font-medium ${textColor}`}>{user.name}</span>
+                  <span className={`text-xs ${textMuted} px-1.5 py-0.5 rounded-full bg-gray-200 dark:bg-gray-700`}>
+                    {user.role}
+                  </span>
                 </div>
                 <button
                   onClick={handleLogout}
@@ -81,7 +82,6 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
@@ -92,7 +92,6 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className={`md:hidden py-4 border-t ${borderColor} space-y-3`}>
             <Link to="/stations" className={`block ${textColor} ${hoverColor} transition-colors duration-200 text-sm font-medium py-1`} onClick={() => setIsMobileMenuOpen(false)}>
@@ -117,7 +116,7 @@ const Navbar = () => {
                   <span className={`text-sm ${textColor} font-medium`}>{user.name}</span>
                   <button
                     onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}
-                    className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl transition-all duration-300 text-sm font-medium"
+                    className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-xl transition-colors duration-300 text-sm font-medium"
                   >
                     Logout
                   </button>
