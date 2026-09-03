@@ -32,6 +32,15 @@ const markerStyles = `
   .custom-marker-container {
     background: transparent !important;
   }
+  .gradient-text {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .leaflet-container {
+    z-index: 1 !important;
+  }
 `;
 
 if (typeof document !== 'undefined') {
@@ -323,95 +332,143 @@ const Stations = () => {
   // ==================== RENDER ====================
   return (
     <div className={`min-h-screen ${bgColor} transition-colors duration-300`}>
-      {/* Hero Section */}
-      <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} border-b ${borderColor}`}>
-        <div className="container mx-auto px-4 py-12 md:py-16">
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="flex justify-center mb-4">
-              <span className="text-5xl">⚡</span>
+      {/* ========== REDESIGNED HERO SECTION ========== */}
+      <div className="relative overflow-hidden">
+        {/* Background Gradient */}
+        <div className={`absolute inset-0 ${isDark ? 'bg-gray-800' : 'bg-gradient-to-br from-blue-50 via-white to-purple-50'}`}></div>
+        
+        {/* Decorative Circles */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-400/10 rounded-full blur-3xl"></div>
+        
+        <div className="relative container mx-auto px-4 py-16 md:py-20">
+          <div className="max-w-4xl mx-auto text-center">
+            {/* Badge - FIXED for light mode */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 text-sm font-medium mb-6 border border-green-200 dark:border-green-800 shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+              Live across India
             </div>
-            <h1 className={`text-3xl md:text-4xl font-bold ${textColor} mb-3`}>
-              Find EV Charging Stations
+
+            {/* Main Heading */}
+            <h1 className={`text-4xl md:text-6xl font-bold ${textColor} mb-4 tracking-tight leading-tight`}>
+              Power Your Journey
+              <span className="block gradient-text">Find EV Charging</span>
             </h1>
-            <p className={`text-base ${textMuted} max-w-2xl mx-auto mb-6`}>
-              Discover nearby EV charging points across India and book your slot instantly.
+
+            {/* Description */}
+            <p className={`text-lg ${textMuted} max-w-2xl mx-auto mb-10 leading-relaxed`}>
+              Discover nearby EV charging stations, check real-time availability, 
+              and book your spot in seconds — all from one place.
             </p>
-            
-            <div className={`${cardBg} rounded-2xl shadow-lg p-5 max-w-2xl mx-auto border ${borderColor}`}>
+
+            {/* Search Box */}
+            <div className={`${cardBg} rounded-2xl shadow-2xl p-6 max-w-2xl mx-auto border ${borderColor} backdrop-blur-sm`}>
               <div className="flex flex-col sm:flex-row gap-3">
-                <select
-                  className={`flex-1 px-4 py-3 rounded-xl ${isDark ? 'bg-gray-700 text-white' : 'bg-gray-50 text-gray-900'} border ${borderColor} focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300`}
-                  value={selectedCity}
-                  onChange={(e) => handleCitySelect(e.target.value)}
-                >
-                  <option value="">🏙️ Select your city</option>
-                  {Object.keys(INDIAN_CITIES).map((city) => (
-                    <option key={city} value={city}>{city}</option>
-                  ))}
-                </select>
+                <div className="flex-1 relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xl">📍</span>
+                  <select
+                    className={`w-full pl-12 pr-4 py-3.5 rounded-xl ${isDark ? 'bg-gray-700 text-white' : 'bg-gray-50 text-gray-900'} border ${borderColor} focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 appearance-none cursor-pointer`}
+                    value={selectedCity}
+                    onChange={(e) => handleCitySelect(e.target.value)}
+                  >
+                    <option value="">Select your city</option>
+                    {Object.keys(INDIAN_CITIES).map((city) => (
+                      <option key={city} value={city}>{city}</option>
+                    ))}
+                  </select>
+                </div>
                 <button
                   onClick={handleUseLocation}
                   disabled={isSearching}
-                  className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-xl transition-colors duration-300 font-medium whitespace-nowrap flex items-center justify-center gap-2"
+                  className="px-8 py-3.5 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-xl transition-all duration-300 font-medium whitespace-nowrap flex items-center justify-center gap-2 shadow-lg hover:shadow-xl disabled:opacity-70"
                 >
                   {isSearching ? (
                     <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
                   ) : (
-                    '📍 Use My Location'
+                    <>
+                      <span>📍</span> Use My Location
+                    </>
                   )}
                 </button>
               </div>
             </div>
 
-            <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm">
-              <div className={`flex items-center gap-2 ${textMuted}`}>
-                <span className="text-green-500">●</span> 20+ Cities
+            {/* Stats */}
+            <div className="mt-10 flex flex-wrap justify-center gap-8 md:gap-12">
+              <div className="text-center group cursor-default">
+                <div className={`text-3xl font-bold ${textColor} group-hover:text-blue-500 transition-colors duration-300`}>20+</div>
+                <div className={`text-sm ${textMuted}`}>Cities</div>
               </div>
-              <div className={`flex items-center gap-2 ${textMuted}`}>
-                <span className="text-blue-500">●</span> 50+ Stations
+              <div className="text-center group cursor-default">
+                <div className={`text-3xl font-bold ${textColor} group-hover:text-green-500 transition-colors duration-300`}>50+</div>
+                <div className={`text-sm ${textMuted}`}>Stations</div>
               </div>
-              <div className={`flex items-center gap-2 ${textMuted}`}>
-                <span className="text-purple-500">●</span> 24/7 Availability
+              <div className="text-center group cursor-default">
+                <div className={`text-3xl font-bold ${textColor} group-hover:text-purple-500 transition-colors duration-300`}>24/7</div>
+                <div className={`text-sm ${textMuted}`}>Availability</div>
+              </div>
+              <div className="text-center group cursor-default">
+                <div className={`text-3xl font-bold ${textColor} group-hover:text-yellow-500 transition-colors duration-300`}>4.5★</div>
+                <div className={`text-sm ${textMuted}`}>Avg. Rating</div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Features Section */}
+      {/* ========== FEATURES SECTION ========== */}
       {!hasSearched && (
-        <div className="container mx-auto px-4 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <div className={`${cardBg} rounded-xl p-6 text-center border ${borderColor}`}>
-              <div className="text-4xl mb-3">🔍</div>
-              <h3 className={`font-semibold ${textColor} mb-2`}>Find Stations</h3>
-              <p className={`text-sm ${textMuted}`}>Search for EV charging stations in your city</p>
+        <div className="container mx-auto px-4 py-20 relative z-10">
+          <div className="text-center mb-12">
+            <h2 className={`text-3xl font-bold ${textColor} mb-2`}>How It Works</h2>
+            <p className={`${textMuted}`}>Find, book, and charge in three simple steps</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <div className={`${cardBg} rounded-2xl p-8 text-center border ${borderColor} hover:shadow-2xl transition-all duration-300 group transform hover:-translate-y-2`}>
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform duration-300">
+                <span className="text-3xl">🔍</span>
+              </div>
+              <h3 className={`text-xl font-semibold ${textColor} mb-2`}>Find Stations</h3>
+              <p className={`text-sm ${textMuted} leading-relaxed`}>
+                Search for EV charging stations in your city or discover nearby options instantly
+              </p>
             </div>
-            <div className={`${cardBg} rounded-xl p-6 text-center border ${borderColor}`}>
-              <div className="text-4xl mb-3">📅</div>
-              <h3 className={`font-semibold ${textColor} mb-2`}>Book a Slot</h3>
-              <p className={`text-sm ${textMuted}`}>Check availability and book your charging time</p>
+
+            <div className={`${cardBg} rounded-2xl p-8 text-center border ${borderColor} hover:shadow-2xl transition-all duration-300 group transform hover:-translate-y-2`}>
+              <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-2xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform duration-300">
+                <span className="text-3xl">📅</span>
+              </div>
+              <h3 className={`text-xl font-semibold ${textColor} mb-2`}>Book a Slot</h3>
+              <p className={`text-sm ${textMuted} leading-relaxed`}>
+                Check real-time availability and reserve your charging time with ease
+              </p>
             </div>
-            <div className={`${cardBg} rounded-xl p-6 text-center border ${borderColor}`}>
-              <div className="text-4xl mb-3">🚗</div>
-              <h3 className={`font-semibold ${textColor} mb-2`}>Charge & Go</h3>
-              <p className={`text-sm ${textMuted}`}>Get directions and start charging instantly</p>
+
+            <div className={`${cardBg} rounded-2xl p-8 text-center border ${borderColor} hover:shadow-2xl transition-all duration-300 group transform hover:-translate-y-2`}>
+              <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center mx-auto mb-5 group-hover:scale-110 transition-transform duration-300">
+                <span className="text-3xl">🚗</span>
+              </div>
+              <h3 className={`text-xl font-semibold ${textColor} mb-2`}>Charge & Go</h3>
+              <p className={`text-sm ${textMuted} leading-relaxed`}>
+                Get directions to the station and start charging your vehicle instantly
+              </p>
             </div>
           </div>
         </div>
       )}
 
-      {/* Map Section */}
+      {/* ========== MAP SECTION ========== */}
       {showMap && (
-        <div className="container mx-auto px-4 py-6">
-          <div className={`${cardBg} rounded-xl shadow-lg p-3 border ${borderColor}`}>
-            <div className="h-[450px] rounded-lg overflow-hidden">
+        <div className="container mx-auto px-4 py-8 relative z-10">
+          <div className={`${cardBg} rounded-2xl shadow-2xl p-3 border ${borderColor}`}>
+            <div className="h-[450px] rounded-xl overflow-hidden relative">
               <MapContainer
                 center={mapCenter}
                 zoom={zoom}
                 style={{ height: '100%', width: '100%' }}
                 zoomControl={true}
                 attributionControl={true}
+                className="relative z-0"
               >
                 <MapController center={mapCenter} zoom={zoom} />
                 <TileLayer
@@ -469,45 +526,48 @@ const Stations = () => {
         </div>
       )}
 
-      {/* Results Section */}
+      {/* ========== RESULTS SECTION ========== */}
       {hasSearched && (
-        <div className="container mx-auto px-4 py-6 pb-12">
+        <div className="container mx-auto px-4 py-8 pb-20 relative z-10">
           {loading ? (
-            <div className="flex flex-col items-center justify-center py-12">
-              <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-              <p className={`${textMuted} mt-4`}>Finding charging stations...</p>
+            <div className="flex flex-col items-center justify-center py-16">
+              <div className="w-14 h-14 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+              <p className={`${textMuted} mt-4 font-medium`}>Finding charging stations...</p>
             </div>
           ) : stations.length === 0 ? (
-            <div className={`${cardBg} rounded-xl shadow-lg p-12 text-center border ${borderColor}`}>
-              <div className="text-5xl mb-4">🔌</div>
-              <h3 className={`text-xl font-semibold ${textColor} mb-2`}>No Stations Found</h3>
-              <p className={textMuted}>Try selecting a different city or use your location.</p>
+            <div className={`${cardBg} rounded-2xl shadow-2xl p-16 text-center border ${borderColor}`}>
+              <div className="text-6xl mb-4">🔌</div>
+              <h3 className={`text-2xl font-bold ${textColor} mb-2`}>No Stations Found</h3>
+              <p className={`${textMuted} max-w-md mx-auto`}>
+                We couldn't find any charging stations in this area. Try selecting a different city.
+              </p>
             </div>
           ) : (
             <>
-              <div className="flex items-center justify-between mb-6 flex-wrap gap-2">
+              <div className="flex items-center justify-between mb-8 flex-wrap gap-2">
                 <div>
-                  <h2 className={`text-xl font-semibold ${textColor}`}>
-                    ⚡ {stations.length} Station{stations.length > 1 ? 's' : ''} Found
+                  <h2 className={`text-2xl font-bold ${textColor}`}>
+                    ⚡ {stations.length} Station{stations.length > 1 ? 's' : ''} Available
                   </h2>
-                  <p className={`text-sm ${textMuted}`}>in {selectedCity || 'your area'}</p>
+                  <p className={`text-sm ${textMuted}`}>
+                    {selectedCity ? `in ${selectedCity}` : 'near your location'}
+                  </p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className={`px-3 py-1 ${isDark ? 'bg-gray-700' : 'bg-blue-100'} ${isDark ? 'text-gray-300' : 'text-blue-700'} rounded-full text-sm font-medium`}>
-                    Live
-                  </span>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                  <span className={`text-sm ${textMuted}`}>Live</span>
                   {canManage && (
-                    <span className={`px-3 py-1 ${isDark ? 'bg-green-900' : 'bg-green-100'} ${isDark ? 'text-green-300' : 'text-green-700'} rounded-full text-sm font-medium`}>
-                      👑 Manage
-                    </span>
-                  )}
-                  {canManage && (
-                    <button
-                      onClick={() => setShowAddModal(true)}
-                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-colors duration-200 text-sm font-medium flex items-center gap-1"
-                    >
-                      ➕ Add Station
-                    </button>
+                    <>
+                      <span className={`px-3 py-1 ${isDark ? 'bg-green-900' : 'bg-green-100'} ${isDark ? 'text-green-300' : 'text-green-700'} rounded-full text-sm font-medium`}>
+                        👑 Manage
+                      </span>
+                      <button
+                        onClick={() => setShowAddModal(true)}
+                        className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-colors duration-200 text-sm font-medium flex items-center gap-1 shadow-md hover:shadow-lg"
+                      >
+                        ➕ Add Station
+                      </button>
+                    </>
                   )}
                 </div>
               </div>
@@ -532,7 +592,7 @@ const Stations = () => {
         </div>
       )}
 
-      {/* Add Station Modal */}
+      {/* ========== MODALS ========== */}
       {showAddModal && (
         <StationModal
           isDark={isDark}
@@ -546,7 +606,6 @@ const Stations = () => {
         />
       )}
 
-      {/* Edit Station Modal */}
       {showEditModal && (
         <StationModal
           isDark={isDark}

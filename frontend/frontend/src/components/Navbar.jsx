@@ -21,7 +21,7 @@ const Navbar = () => {
   const hoverColor = isDark ? 'hover:text-blue-400' : 'hover:text-blue-600';
 
   return (
-    <nav className={`${bgColor} border-b ${borderColor} sticky top-0 z-40 transition-colors duration-300`}>
+    <nav className={`${bgColor} border-b ${borderColor} sticky top-0 z-50 transition-colors duration-300`}>
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="flex items-center gap-2.5 group">
